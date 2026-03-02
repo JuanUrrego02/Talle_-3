@@ -1,107 +1,158 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 
-// MUI ICONS
+// ICONS
 import HomeIcon from "@mui/icons-material/Home";
 import ArticleIcon from "@mui/icons-material/Article";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
 
-// MUI COMPONENTS
-import {AppBar, Toolbar, Button, Stack, Typography, Box, TextField,} from "@mui/material";
+// MUI
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 
 export const Header = () => {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [query, setQuery] = React.useState("");
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const navItems = [
+    { to: "/", label: "Inicio", icon: <HomeIcon /> },
+    { to: "/article", label: "Artículos", icon: <ArticleIcon /> },
+    { to: "/offers", label: "Ofertas", icon: <LocalOfferIcon /> },
+    { to: "/account", label: "Mi Cuenta", icon: <PersonIcon /> },
+    { to: "/purchases", label: "Mis Compras", icon: <ShoppingBagIcon /> },
+    { to: "/favorites", label: "Favoritos", icon: <FavoriteIcon /> },
+  ];
+
   return (
     <>
-      <AppBar position="fixed" color="primary">
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          
-          {/* LEFT SIDE */}
-          <Stack direction="row" spacing={1}>
-            <Button
-              color="inherit"
-              component={NavLink}
-              to="/"
-              startIcon={<HomeIcon />}
-            >
-              Inicio
-            </Button>
+      <AppBar position="fixed">
+        <Toolbar>
 
-            <Button
+          {/* MENÚ MOBILE */}
+          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+            <IconButton
+              size="large"
               color="inherit"
-              component={NavLink}
-              to="/article"
-              startIcon={<ArticleIcon />}
+              onClick={handleOpenNavMenu}
             >
-              Artículos
-            </Button>
+              <MenuIcon />
+            </IconButton>
 
-            <Button
-              color="inherit"
-              component={NavLink}
-              to="/offers"
-              startIcon={<LocalOfferIcon />}
+            <Menu
+              anchorEl={anchorElNav}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
             >
-              Ofertas
-            </Button>
-
-            <Button
-              color="inherit"
-              component={NavLink}
-              to="/account"
-              startIcon={<PersonIcon />}
-            >
-              Mi Cuenta
-            </Button>
-
-            <Button
-              color="inherit"
-              component={NavLink}
-              to="/purchases"
-              startIcon={<ShoppingBagIcon />}
-            >
-              Mis Compras
-            </Button>
-
-            <Button
-              color="inherit"
-              component={NavLink}
-              to="/favorites"
-              startIcon={<FavoriteIcon />}
-            >
-              Favoritos
-            </Button>
-          </Stack>
-
-          {/* RIGHT SIDE - SEARCH */}
-          <Box
-            component="form"
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <TextField
-              size="small"
-              variant="outlined"
-              placeholder="Buscar productos..."
-              sx={{
-                bgcolor: "white",
-                borderRadius: 1,
-              }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<SearchIcon />}
-            >
-              Buscar
-            </Button>
+              {navItems.map((item) => (
+                <MenuItem
+                  key={item.to}
+                  component={NavLink}
+                  to={item.to}
+                  onClick={handleCloseNavMenu}
+                >
+                  {item.label}
+                </MenuItem>
+              ))}
+            </Menu>
           </Box>
+
+          {/* TÍTULO */}
+          <Typography
+            variant="h6"
+            component={NavLink}
+            to="/"
+            sx={{
+              flexGrow: 1,
+              fontWeight: "bold",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            Sistema Carrito
+          </Typography>
+
+          {/* MENÚ DESKTOP */}
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+            {navItems.map((item) => (
+              <Button
+                key={item.to}
+                color="inherit"
+                component={NavLink}
+                to={item.to}
+                startIcon={item.icon}
+                sx={{
+                  "&.active": {
+                    bgcolor: "rgba(255,255,255,0.15)",
+                  },
+                }}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
+
+          {/* SEARCH DESKTOP */}
+          <TextField
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            size="small"
+            placeholder="Buscar artículos..."
+            sx={{
+              display: { xs: "none", md: "flex" },
+              bgcolor: "white",
+              borderRadius: 1,
+              minWidth: 220,
+              mx: 2,
+              "& .MuiOutlinedInput-root": { bgcolor: "white" },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {/* CARRITO */}
+          <IconButton
+            color="inherit"
+            component={NavLink}
+            to="/cart"
+          >
+            <ShoppingCartIcon />
+          </IconButton>
+
         </Toolbar>
       </AppBar>
 
-      {/* Esto evita que el contenido quede debajo del AppBar */}
+      {/* Espaciador para que no tape el contenido */}
       <Toolbar />
     </>
   );
