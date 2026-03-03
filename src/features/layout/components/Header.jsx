@@ -12,6 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
 
+
 // MUI
 import {
   AppBar,
@@ -25,6 +26,7 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -47,9 +49,15 @@ export const Header = () => {
     { to: "/favorites", label: "Favoritos", icon: <FavoriteIcon /> },
   ];
 
+  //MUI COLORS
+  const styleAppBar = {
+    backgroundColor: grey[500],
+    color: "#ffffff"//Texto Oscuro para el constraste con el fondo claro,
+  };
+
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar position="fixed" style={styleAppBar}>
         <Toolbar>
 
           {/* MENÚ MOBILE */}
@@ -94,7 +102,7 @@ export const Header = () => {
               textDecoration: "none",
             }}
           >
-            Sistema Carrito
+            Manchester Clothing
           </Typography>
 
           {/* MENÚ DESKTOP */}
