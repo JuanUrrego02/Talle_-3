@@ -29,10 +29,6 @@ function App() {
       <Route path="/account" element={ <Account></Account> }></Route>
       <Route path="/favorites" element={ <Favorites></Favorites> }></Route>
       <Route path="/purchases" element={ <Purchases></Purchases> }></Route>
-      <Route path="/cart" element={ <Cart></Cart> }></Route>
-    
-
-
     </Routes>
     <Footer></Footer>
     </HashRouter>
