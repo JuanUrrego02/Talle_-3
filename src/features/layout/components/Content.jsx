@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import IconButton from "@mui/material/IconButton";
+
 import {
   Box,
   Container,
@@ -12,13 +14,38 @@ import {
   CardActions,
   Typography,
   Button,
-
 } from "@mui/material";
+
 import { products } from "../../view/utils/catalogo";
+import {
+  getFavoriteIds,
+  toggleFavoriteId,
+  FAVORITES_STORAGE_EVENT,
+} from "../../view/utils/favoriteCart";
+import { addToCart } from "../../view/utils/localstorange";
 
 export const Content = () => {
 
-  
+  const visibleProducts = products.slice(0, 3);
+  const [favoriteIds, setFavoriteIds] = useState([]);
+
+  useEffect(() => {
+    const syncFavorites = () => setFavoriteIds(getFavoriteIds());
+
+    const handleFavoritesUpdate = () => {
+      setFavoriteIds(getFavoriteIds());
+    };
+
+    syncFavorites();
+
+    window.addEventListener(FAVORITES_STORAGE_EVENT, handleFavoritesUpdate);
+    window.addEventListener("storage", syncFavorites);
+
+    return () => {
+      window.removeEventListener(FAVORITES_STORAGE_EVENT, handleFavoritesUpdate);
+      window.removeEventListener("storage", syncFavorites);
+    };
+  }, []);
 
   return (
     <Box
@@ -29,7 +56,7 @@ export const Content = () => {
       }}
     >
 
-      {/* HERO / PRESENTACIÓN */}
+      {/* HERO */}
       <Box
         sx={{
           position: "relative",
@@ -80,74 +107,93 @@ export const Content = () => {
 
       {/* PRODUCTOS */}
 
-      <Typography variant="h4" fontWeight={700} sx={{ mt: 5, mb: -3, textAlign: "center" }}>
+      <Typography
+        variant="h4"
+        fontWeight={700}
+        sx={{ mt: 5, mb: -3, textAlign: "center" }}
+      >
         Nuestros Nuevos Productos
       </Typography>
+
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Grid container spacing={3}>
 
-          {products.map((product, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+          {visibleProducts.map((product) => {
+            const productId = product.title;
+            const isFavorite = favoriteIds.includes(productId);
 
-              <Card
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                }}
-              >
+            return (
+              <Grid item xs={12} sm={6} md={4} key={productId}>
 
-                <CardActionArea>
-
-                  <CardMedia
-                    component="img"
-                    image={product.image}
-                    alt={product.title}
-                    sx={{
-                      height: 300,
-                      width: "100%",
-                      objectFit: "cover"
-                    }}
-                  />
-
-                  <CardContent>
-                    <Typography gutterBottom variant="h6">
-                      {product.title}
-                    </Typography>
-
-                    <Typography variant="body2" color="text.secondary">
-                      {product.description}
-                    </Typography>
-                  </CardContent>
-
-                </CardActionArea>
-
-                <CardActions
+                <Card
                   sx={{
-                    justifyContent: "center",
-                    px: 1,
-                    pb: 2,
-                    gap: 2
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
                   }}
                 >
 
-                  <Button size="small" variant="outlined">
-                    Ver artículo
-                  </Button>
+                  <CardActionArea>
 
-                  <Button size="small" variant="contained">
-                    Comprar
-                  </Button>
+                    <CardMedia
+                      component="img"
+                      image={product.image}
+                      alt={product.title}
+                      sx={{
+                        height: 300,
+                        width: "100%",
+                        objectFit: "cover"
+                      }}
+                    />
 
-                  <IconButton color="error">
-                    <FavoriteBorderIcon />
-                  </IconButton>
-                </CardActions>
+                    <CardContent>
 
-              </Card>
+                      <Typography gutterBottom variant="h6">
+                        {product.title}
+                      </Typography>
 
-            </Grid>
-          ))}
+                      <Typography variant="body2" color="text.secondary">
+                        {product.description}
+                      </Typography>
+
+                    </CardContent>
+
+                  </CardActionArea>
+
+                  <CardActions
+                    sx={{
+                      justifyContent: "center",
+                      px: 1,
+                      pb: 2,
+                      gap: 2
+                    }}
+                  >
+
+                    <Button size="small" variant="outlined">
+                      Ver artículo
+                    </Button>
+
+                    <Button size="small" variant="contained" onClick={() => addToCart(product)}>
+                      Comprar
+                    </Button>
+
+                    <IconButton
+                      color="error"
+                      aria-label={isFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
+                      onClick={() =>
+                        setFavoriteIds(toggleFavoriteId(productId))
+                      }
+                    >
+                      {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                    </IconButton>
+
+                  </CardActions>
+
+                </Card>
+
+              </Grid>
+            );
+          })}
 
         </Grid>
       </Container>

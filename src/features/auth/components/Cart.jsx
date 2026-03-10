@@ -20,7 +20,7 @@ import {
 } from "../../view/utils/localstorange";
 import { formatPrice, products } from "../../view/utils/catalogo";
 
-export const Purchases = () => {
+export const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const Purchases = () => {
     <Box sx={{ minHeight: "100vh", backgroundColor: "#f5f5f5", py: 8 }}>
       <Container maxWidth="lg">
         <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-          Mis Compras
+          Mi Carrito
         </Typography>
         {cartProducts.length === 0 ? (
           <Box
@@ -69,7 +69,7 @@ export const Purchases = () => {
               textAlign: "center"
             }}
           >
-            <Typography sx={{ fontWeight: 600 }}>Tus compras estan vacias</Typography>
+            <Typography sx={{ fontWeight: 600 }}>Tu carrito está vacío</Typography>
           </Box>
         ) : (
           <>

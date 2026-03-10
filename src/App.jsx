@@ -7,9 +7,10 @@ import { Header } from "./features/layout/components/Header";
 import { Content } from "./features/layout/components/Content";
 import { Footer } from "./features/layout/components/Footer";
 //Componentes Auth
-import { Account } from "./features/auth/components/account";
+import { Account } from "./features/auth/components/Account";
 import { Favorites } from "./features/auth/components/Favorites";
 import { Purchases }  from "./features/auth/components/Purchases";
+
 //Componentes de view
 import { Article } from "./features/view/components/Article";
 import { Offers } from "./features/view/components/Offers";
@@ -28,6 +29,7 @@ function App() {
       <Route path="/account" element={ <Account></Account> }></Route>
       <Route path="/favorites" element={ <Favorites></Favorites> }></Route>
       <Route path="/purchases" element={ <Purchases></Purchases> }></Route>
+      <Route path="/cart" element={ <Cart></Cart> }></Route>
     
 
 

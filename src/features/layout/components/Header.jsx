@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 // ICONS
@@ -16,6 +16,7 @@ import SearchIcon from "@mui/icons-material/Search";
 // MUI
 import {
   AppBar,
+  Badge,
   Toolbar,
   Button,
   Box,
@@ -27,10 +28,29 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import {
+  getFavoriteIds,
+  toggleFavoriteId,
+  FAVORITES_STORAGE_EVENT,
+} from "../../view/utils/favoriteCart";
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [query, setQuery] = React.useState("");
+  const [favoriteCount, setFavoriteCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const syncFavorites = () => setFavoriteCount(getFavoriteIds().length);
+
+    syncFavorites();
+    window.addEventListener(FAVORITES_STORAGE_EVENT, syncFavorites);
+    window.addEventListener("storage", syncFavorites);
+
+    return () => {
+      window.removeEventListener(FAVORITES_STORAGE_EVENT, syncFavorites);
+      window.removeEventListener("storage", syncFavorites);
+    };
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -46,7 +66,7 @@ export const Header = () => {
     { to: "/offers", label: "Ofertas", icon: <LocalOfferIcon /> },
     { to: "/account", label: "Mi Cuenta", icon: <PersonIcon /> },
     { to: "/purchases", label: "Mis Compras", icon: <ShoppingBagIcon /> },
-    { to: "/favorites", label: "Favoritos", icon: <FavoriteIcon /> },
+    { to: "/favorites", label: `Favoritos`,  icon: <Badge badgeContent={favoriteCount} color="error"><FavoriteIcon /></Badge> },
   ];
 
   //MUI COLORS
