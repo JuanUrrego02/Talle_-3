@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  Container,
+  Grid,
   Card,
   CardContent,
   CardMedia,
@@ -9,58 +11,110 @@ import {
   Button
 } from "@mui/material";
 
-const Article = ({ title, description, image }) => {
+export const Article = () => {
 
-  const defaultImage =
-    "https://images.unsplash.com/photo-1523381210434-271e8be1f52b";
+  const products = [
+    { title: "Camiseta Clemont - Negra", 
+      description: "Precio: $150.000", 
+      image: "../public/img/1.jpg", 
+    },
+    { title: "Pantalón Purple - Claro",
+      description: "Precio: $200.000",
+      image: "../public/img/2.jpg", 
+    },
+    { title: "Buzo UnderGold - Negro",
+      description: "Precio: $180.000", 
+      image: "../public/img/3.jpg", 
+    },
+    { title: "Camiseta UnderGold - Blanca",
+      description: "Precio: $120.000", 
+      image: "../public/img/4.jpg", 
+    },
+    {
+      title: "Buzo Y/Out - Negro",
+      description: "Precio: $180.000",
+      image: "../public/img/5.jpg",
+    },
+    {
+      title: "Mocho Amiri - Claro",
+      description: "Precio: $120.000",
+      image: "../public/img/6.jpg"
+    },
+    {
+      title: "Conjunto Y/Out",
+      description: "Precio: $180.000",
+      image: "../public/img/7.jpg"
+
+    },
+    {
+      title: "Buzo Coach - Negro",
+      description: "Precio: $120.000",
+      image: "../public/img/8.jpg"
+    },
+  ];
+
 
   return (
-    <Card
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-      }}
-    >
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          image={image || defaultImage}
-          alt={title}
-          sx={{
-            height: 200,
-            objectFit: "cover",
-          }}
-        />
+    <Container maxWidth="lg" sx={{ py: 8 }}>
 
-        <CardContent>
-          <Typography variant="subtitle1">
-            {title}
-          </Typography>
+      <Grid container spacing={3}>
 
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+        {products.map((product, index) => (
 
-      <CardActions
-        sx={{
-          justifyContent: "space-between",
-          px: 2,
-          pb: 1.5,
-        }}
-      >
-        <Button size="small" variant="outlined">
-          Ver
-        </Button>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
 
-        <Button size="small" variant="contained">
-          Comprar
-        </Button>
-      </CardActions>
-    </Card>
+            <Card
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+              }}
+            >
+
+              <CardActionArea>
+
+                <CardMedia
+                  component="img"
+                  image={product.image}
+                  alt={product.title}
+                  sx={{
+                    height: 300,
+                    width: "100%",
+                    objectFit: "cover"
+                  }}
+                />
+
+                <CardContent>
+                  <Typography gutterBottom variant="h6">
+                    {product.title}
+                  </Typography>
+
+                  <Typography variant="body2" color="text.secondary">
+                    {product.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+
+              <CardActions
+                sx={{
+                  justifyContent: "space-between",
+                  px: 2,
+                  pb: 2
+                }}
+              >
+
+                <Button size="small" variant="outlined">
+                  Ver artículo
+                </Button>
+
+                <Button size="small" variant="contained">
+                  Comprar
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 };
-
-export default Article;

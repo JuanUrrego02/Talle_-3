@@ -11,7 +11,7 @@ import { Account } from "./features/auth/components/account";
 import { Favorites } from "./features/auth/components/Favorites";
 import { Purchases }  from "./features/auth/components/Purchases";
 //Componentes de view
-import Article from "./features/view/components/Article";
+import { Article } from "./features/view/components/Article";
 import { Offers } from "./features/view/components/Offers";
 
 function App() {
