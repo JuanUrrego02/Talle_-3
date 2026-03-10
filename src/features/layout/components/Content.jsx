@@ -14,15 +14,11 @@ import {
   Button,
 
 } from "@mui/material";
+import { products } from "../../view/utils/catalogo";
 
 export const Content = () => {
 
-  const products = [
-    { title: "Camiseta Clemont - Negra", description: "Precio: $150.000", image: "../public/img/1.jpg", },
-    { title: "Pantalón Purple - Claro", description: "Precio: $200.000", image: "../public/img/2.jpg", },
-    { title: "Buzo UnderGold - Negro", description: "Precio: $180.000", image: "../public/img/3.jpg", },
-    { title: "Camiseta UnderGold - Blanca", description: "Precio: $120.000", image: "../public/img/4.jpg", },
-  ];
+  
 
   return (
     <Box

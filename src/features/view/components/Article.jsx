@@ -1,4 +1,6 @@
 import React from "react";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import IconButton from "@mui/material/IconButton";
 import {
   Container,
   Grid,
@@ -14,21 +16,25 @@ import {
 export const Article = () => {
 
   const products = [
-    { title: "Camiseta Clemont - Negra", 
-      description: "Precio: $150.000", 
-      image: "../public/img/1.jpg", 
+    {
+      title: "Camiseta Clemont - Negra",
+      description: "Precio: $150.000",
+      image: "../public/img/1.jpg",
     },
-    { title: "Pantalón Purple - Claro",
+    {
+      title: "Pantalón Purple - Claro",
       description: "Precio: $200.000",
-      image: "../public/img/2.jpg", 
+      image: "../public/img/2.jpg",
     },
-    { title: "Buzo UnderGold - Negro",
-      description: "Precio: $180.000", 
-      image: "../public/img/3.jpg", 
+    {
+      title: "Buzo UnderGold - Negro",
+      description: "Precio: $180.000",
+      image: "../public/img/3.jpg",
     },
-    { title: "Camiseta UnderGold - Blanca",
-      description: "Precio: $120.000", 
-      image: "../public/img/4.jpg", 
+    {
+      title: "Camiseta UnderGold - Blanca",
+      description: "Precio: $120.000",
+      image: "../public/img/4.jpg",
     },
     {
       title: "Buzo Y/Out - Negro",
@@ -97,12 +103,12 @@ export const Article = () => {
 
               <CardActions
                 sx={{
-                  justifyContent: "space-between",
+                  justifyContent: "center",
+                  gap: 1,
                   px: 2,
                   pb: 2
                 }}
               >
-
                 <Button size="small" variant="outlined">
                   Ver artículo
                 </Button>
@@ -110,6 +116,12 @@ export const Article = () => {
                 <Button size="small" variant="contained">
                   Comprar
                 </Button>
+
+                
+                <IconButton color="error">
+                  <FavoriteBorderIcon />
+                </IconButton>
+
               </CardActions>
             </Card>
           </Grid>
