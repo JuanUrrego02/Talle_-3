@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import * as React from "react";
 import { NavLink } from "react-router-dom";
 
 // ICONS
@@ -16,10 +16,10 @@ import SearchIcon from "@mui/icons-material/Search";
 // MUI
 import {
   AppBar,
-  Badge,
   Toolbar,
   Button,
   Box,
+  Badge,
   IconButton,
   Menu,
   MenuItem,
@@ -29,26 +29,36 @@ import {
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import {
-  getFavoriteIds,
-  toggleFavoriteId,
   FAVORITES_STORAGE_EVENT,
+  getFavoriteIds,
 } from "../../view/utils/favoriteCart";
+import {
+  CART_STORAGE_EVENT,
+  getCartCount,
+} from "../../view/utils/localstorange";
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [query, setQuery] = React.useState("");
   const [favoriteCount, setFavoriteCount] = React.useState(0);
+  const [cartCount, setCartCount] = React.useState(0);
 
   React.useEffect(() => {
     const syncFavorites = () => setFavoriteCount(getFavoriteIds().length);
+    const syncCart = () => setCartCount(getCartCount());
 
     syncFavorites();
+    syncCart();
     window.addEventListener(FAVORITES_STORAGE_EVENT, syncFavorites);
+    window.addEventListener(CART_STORAGE_EVENT, syncCart);
     window.addEventListener("storage", syncFavorites);
+    window.addEventListener("storage", syncCart);
 
     return () => {
       window.removeEventListener(FAVORITES_STORAGE_EVENT, syncFavorites);
+      window.removeEventListener(CART_STORAGE_EVENT, syncCart);
       window.removeEventListener("storage", syncFavorites);
+      window.removeEventListener("storage", syncCart);
     };
   }, []);
 
@@ -66,7 +76,15 @@ export const Header = () => {
     { to: "/offers", label: "Ofertas", icon: <LocalOfferIcon /> },
     { to: "/account", label: "Mi Cuenta", icon: <PersonIcon /> },
     { to: "/purchases", label: "Mis Compras", icon: <ShoppingBagIcon /> },
-    { to: "/favorites", label: `Favoritos`,  icon: <Badge badgeContent={favoriteCount} color="error"><FavoriteIcon /></Badge> },
+    {
+      to: "/favorites",
+      label: `Favoritos ${favoriteCount}`,
+      icon: (
+        <Badge badgeContent={favoriteCount} color="error">
+          <FavoriteIcon />
+        </Badge>
+      ),
+    },
   ];
 
   //MUI COLORS
@@ -174,7 +192,9 @@ export const Header = () => {
             component={NavLink}
             to="/cart"
           >
-            <ShoppingCartIcon />
+            <Badge badgeContent={cartCount} color="error">
+              <ShoppingCartIcon />
+            </Badge>
           </IconButton>
 
         </Toolbar>
