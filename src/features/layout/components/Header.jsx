@@ -11,7 +11,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
-
+import CloseIcon from "@mui/icons-material/Close";
 
 // MUI
 import {
@@ -21,24 +21,31 @@ import {
   Box,
   Badge,
   IconButton,
-  Menu,
-  MenuItem,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Typography,
   TextField,
   InputAdornment,
+  Divider,
 } from "@mui/material";
+
 import { grey } from "@mui/material/colors";
+
 import {
   FAVORITES_STORAGE_EVENT,
   getFavoriteIds,
 } from "../../view/utils/favoriteCart";
+
 import {
   CART_STORAGE_EVENT,
   getCartCount,
 } from "../../view/utils/localstorange";
 
 export const Header = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [favoriteCount, setFavoriteCount] = React.useState(0);
   const [cartCount, setCartCount] = React.useState(0);
@@ -49,6 +56,7 @@ export const Header = () => {
 
     syncFavorites();
     syncCart();
+
     window.addEventListener(FAVORITES_STORAGE_EVENT, syncFavorites);
     window.addEventListener(CART_STORAGE_EVENT, syncCart);
     window.addEventListener("storage", syncFavorites);
@@ -62,14 +70,6 @@ export const Header = () => {
     };
   }, []);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
   const navItems = [
     { to: "/", label: "Inicio", icon: <HomeIcon /> },
     { to: "/article", label: "Artículos", icon: <ArticleIcon /> },
@@ -78,7 +78,7 @@ export const Header = () => {
     { to: "/purchases", label: "Mis Compras", icon: <ShoppingBagIcon /> },
     {
       to: "/favorites",
-      label: `Favoritos ${favoriteCount}`,
+      label: "Favoritos",
       icon: (
         <Badge badgeContent={favoriteCount} color="error">
           <FavoriteIcon />
@@ -87,74 +87,77 @@ export const Header = () => {
     },
   ];
 
-  //MUI COLORS
   const styleAppBar = {
     backgroundColor: grey[500],
-    color: "#ffffff"//Texto Oscuro para el constraste con el fondo claro,
+    color: "#ffffff",
   };
 
   return (
     <>
-      <AppBar position="fixed" style={styleAppBar}>
-        <Toolbar>
-
-          {/* MENÚ MOBILE */}
-          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
-            <IconButton
-              size="large"
-              color="inherit"
-              onClick={handleOpenNavMenu}
-            >
-              <MenuIcon />
+      <AppBar position="fixed" sx={styleAppBar}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: { xs: 1, md: 2 },
+            minHeight: { xs: 60, md: 70 },
+          }}
+        >
+          {/* MOBILE MENU BUTTON */}
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
+              <MenuIcon sx={{ fontSize: 28 }} />
             </IconButton>
-
-            <Menu
-              anchorEl={anchorElNav}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-              transformOrigin={{ vertical: "top", horizontal: "left" }}
-            >
-              {navItems.map((item) => (
-                <MenuItem
-                  key={item.to}
-                  component={NavLink}
-                  to={item.to}
-                  onClick={handleCloseNavMenu}
-                >
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
 
-          {/* TÍTULO */}
+          {/* LOGO */}
           <Typography
-            variant="h6"
             component={NavLink}
             to="/"
             sx={{
-              flexGrow: 1,
+              flexGrow: { xs: 1, md: 0 },
               fontWeight: "bold",
               color: "inherit",
               textDecoration: "none",
+              fontSize: { xs: "1.1rem", md: "1.6rem" },
+              whiteSpace: "nowrap",
+              mr: { md: 3 },
             }}
           >
             Manchester Clothing
           </Typography>
 
-          {/* MENÚ DESKTOP */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+          {/* DESKTOP NAV */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              gap: 1,
+              flexGrow: 1,
+              justifyContent: "center",
+            }}
+          >
             {navItems.map((item) => (
               <Button
                 key={item.to}
-                color="inherit"
                 component={NavLink}
                 to={item.to}
                 startIcon={item.icon}
+                color="inherit"
                 sx={{
+                  textTransform: "none",
+                  fontWeight: 600,
+                  fontSize: "0.95rem",
+                  borderRadius: 2,
+                  px: 2,
+                  py: 1,
+                  "& .MuiSvgIcon-root": {
+                    fontSize: 22,
+                  },
                   "&.active": {
                     bgcolor: "rgba(255,255,255,0.15)",
+                  },
+                  "&:hover": {
+                    bgcolor: "rgba(255,255,255,0.1)",
                   },
                 }}
               >
@@ -172,10 +175,9 @@ export const Header = () => {
             sx={{
               display: { xs: "none", md: "flex" },
               bgcolor: "white",
-              borderRadius: 1,
-              minWidth: 220,
+              borderRadius: 2,
+              minWidth: { md: 220, lg: 260 },
               mx: 2,
-              "& .MuiOutlinedInput-root": { bgcolor: "white" },
             }}
             InputProps={{
               startAdornment: (
@@ -186,21 +188,77 @@ export const Header = () => {
             }}
           />
 
-          {/* CARRITO */}
+          {/* CART */}
           <IconButton
-            color="inherit"
             component={NavLink}
             to="/cart"
+            color="inherit"
+            sx={{ "& svg": { fontSize: 26 } }}
           >
             <Badge badgeContent={cartCount} color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-
         </Toolbar>
       </AppBar>
 
-      {/* Espaciador para que no tape el contenido */}
+      {/* MOBILE DRAWER MENU */}
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <Box sx={{ width: 270 }}>
+          {/* HEADER MENU */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              p: 2,
+            }}
+          >
+            <Typography fontWeight="bold" fontSize={20}>
+              Manchester
+            </Typography>
+
+            <IconButton onClick={() => setDrawerOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+
+          <Divider />
+
+          {/* NAV ITEMS */}
+          <List>
+            {navItems.map((item) => (
+              <ListItemButton
+                key={item.to}
+                component={NavLink}
+                to={item.to}
+                onClick={() => setDrawerOpen(false)}
+                sx={{
+                  py: 1.4,
+                }}
+              >
+                <ListItemIcon sx={{ "& svg": { fontSize: 24 } }}>
+                  {item.icon}
+                </ListItemIcon>
+
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontSize: 16,
+                    fontWeight: 500,
+                  }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+
+      {/* Spacer */}
       <Toolbar />
     </>
   );

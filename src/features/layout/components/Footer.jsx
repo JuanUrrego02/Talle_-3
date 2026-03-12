@@ -2,12 +2,13 @@ import React from "react";
 import { Box, Container, Divider, Grid, Link, Stack, Typography } from "@mui/material";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import GitHubIcon from '@mui/icons-material/GitHub';
 import IconButton from "@mui/material/IconButton";
 import { grey } from "@mui/material/colors";
 
 const styleAppBar = {
-  backgroundColor: grey[500],
-  color: "#ffffff"
+    backgroundColor: grey[500],
+    color: "#ffffff"
 };
 export const Footer = () => {
     return (
@@ -88,6 +89,16 @@ export const Footer = () => {
 
                                 <IconButton sx={{ color: "#F5F1E8" }}>
                                     <WhatsAppIcon />
+                                </IconButton>
+
+                                <IconButton
+                                    component="a"
+                                    href="https://github.com/JuanUrrego02/Talle_-3"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{ color: "#F5F1E8" }}
+                                >
+                                    <GitHubIcon />
                                 </IconButton>
                             </Stack>
                         </Stack>

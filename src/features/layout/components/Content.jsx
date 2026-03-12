@@ -123,7 +123,7 @@ export const Content = () => {
             const isFavorite = favoriteIds.includes(productId);
 
             return (
-              <Grid item xs={12} sm={6} md={4} key={productId}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={productId}>
 
                 <Card
                   sx={{
@@ -173,7 +173,7 @@ export const Content = () => {
                       Ver artículo
                     </Button>
 
-                    <Button size="small" variant="contained" onClick={() => addToCart(product)}>
+                    <Button size="small" variant="contained" onClick={() => addToCart(product.title)}>
                       Comprar
                     </Button>
 
