@@ -38,7 +38,7 @@ export const products = [
     {
       title: "Buzo Coach - Negro",
       description: "Precio: $120.000",
-      image: "../public/img/8.jpg"
+      image: "../public/img/9.jpg"
     },
   ];
 
